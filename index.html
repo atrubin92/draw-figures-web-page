@@ -40,13 +40,13 @@
 
     // Pointer properties
     const pointer = {
-        radius: 10,
-        color: '#FF6347'
+        color: '#FF6347',
+        points: 30
     };
 
     // Angle and speed of rotation (in radians)
     let angle = 0;
-    const speed = 0.02;  // Control how fast the pointer moves
+    const speed = 0.01;  // Control how fast the pointer moves
 
     // Draw the circle and pointer
     function draw() {
@@ -86,16 +86,21 @@
         // ctx.stroke();
         // ctx.closePath();
 
-        // Calculate pointer position using sine and cosine
-        const pointerX = circle.x + circle.radius * Math.cos(angle*3);
-        const pointerY = circle.y + circle.radius * Math.sin(angle*5);
 
         // Draw the pointer
-        ctx.beginPath();
-        ctx.arc(pointerX, pointerY, pointer.radius, 0, Math.PI * 2);
-        ctx.fillStyle = pointer.color;
-        ctx.fill();
-        ctx.closePath();
+        for (let radius = pointer.points; radius > 0; radius--) {
+            const currentAngel = angle - (pointer.points-radius)*speed
+
+            // Calculate pointer position using sine and cosine
+            const pointerX = circle.x + circle.radius * Math.cos(currentAngel*3);
+            const pointerY = circle.y + circle.radius * Math.sin(currentAngel*5);
+
+            ctx.beginPath();
+            ctx.arc(pointerX, pointerY, radius/3, 0, Math.PI * 2);
+            ctx.fillStyle = pointer.color;
+            ctx.fill();
+            ctx.closePath();
+        }
 
         // Update the angle for next frame
         angle += speed;
