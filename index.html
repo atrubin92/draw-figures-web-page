@@ -78,18 +78,10 @@
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        // Draw the circle
-        // ctx.beginPath();
-        // ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
-        // ctx.strokeStyle = circle.color;
-        // ctx.lineWidth = 2;
-        // ctx.stroke();
-        // ctx.closePath();
-
-
         // Draw the pointer
         for (let radius = pointer.points; radius > 0; radius--) {
             const currentAngel = angle - (pointer.points-radius)*speed
+            const alpha = radius/pointer.points;
 
             // Calculate pointer position using sine and cosine
             const pointerX = circle.x + circle.radius * Math.cos(currentAngel*3);
@@ -97,7 +89,7 @@
 
             ctx.beginPath();
             ctx.arc(pointerX, pointerY, radius/3, 0, Math.PI * 2);
-            ctx.fillStyle = pointer.color;
+            ctx.fillStyle = `rgba(255, 31, 31, ${alpha})`;
             ctx.fill();
             ctx.closePath();
         }
@@ -111,13 +103,6 @@
 
     // Start the animation
     draw();
-
-    // Draw the circle path using points
-    function drawPathWithPoints() {
-    }
-
-    // Draw the path on the canvas
-    drawPathWithPoints();
 </script>
 
 </body>
