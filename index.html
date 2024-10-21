@@ -3,53 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Simple HTML Page</title>
+    <title>Pointer Moving in a Circle</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
         }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px;
-            text-align: center;
-        }
-        main {
-            margin: 20px;
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-        }
-        a {
-            color: #4CAF50;
+        canvas {
+            border: 1px solid #000;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Welcome to My Simple HTML Page</h1>
-</header>
+<canvas id="myCanvas" width="500" height="500"></canvas>
 
-<main>
-    <h2>About This Page</h2>
-    <p>This is a simple HTML page with a basic structure. Feel free to explore the layout and styling.</p>
-    <p>Here’s a link to <a href="https://www.google.com" target="_blank">Google</a> for more information.</p>
-</main>
+<script>
+    // Get the canvas and context
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
 
-<footer>
-    <p>&copy; 2024 My Simple HTML Page. All rights reserved.</p>
-</footer>
+    // Circle properties
+    const circle = {
+        x: canvas.width / 2,
+        y: canvas.height / 2,
+        radius: 200,
+        color: '#4CAF50',
+        points: 300  // Number of points to use for the path
+    };
+
+    // Pointer properties
+    const pointer = {
+        radius: 10,
+        color: '#FF6347'
+    };
+
+    // Angle and speed of rotation (in radians)
+    let angle = 0;
+    const speed = 0.02;  // Control how fast the pointer moves
+
+    // Draw the circle and pointer
+    function draw() {
+
+        // Clear the canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const points = [];
+        const step = (Math.PI * 2) / circle.points;  // Step size in radians
+
+        // Calculate the points on the circle's circumference
+        for (let i = 0; i <= circle.points; i++) {
+            const angle = i * step;
+            const pointX = circle.x + circle.radius * Math.cos(angle*3);
+            const pointY = circle.y + circle.radius * Math.sin(angle*5);
+            points.push({ x: pointX, y: pointY });
+        }
+
+        // Draw the path by connecting points
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);  // Move to the first point
+
+        for (let i = 1; i < points.length; i++) {
+            ctx.lineTo(points[i].x, points[i].y);  // Connect each point with a line
+        }
+
+        ctx.closePath();  // Close the path to form the circle
+        ctx.strokeStyle = circle.color;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Draw the circle
+        // ctx.beginPath();
+        // ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+        // ctx.strokeStyle = circle.color;
+        // ctx.lineWidth = 2;
+        // ctx.stroke();
+        // ctx.closePath();
+
+        // Calculate pointer position using sine and cosine
+        const pointerX = circle.x + circle.radius * Math.cos(angle*3);
+        const pointerY = circle.y + circle.radius * Math.sin(angle*5);
+
+        // Draw the pointer
+        ctx.beginPath();
+        ctx.arc(pointerX, pointerY, pointer.radius, 0, Math.PI * 2);
+        ctx.fillStyle = pointer.color;
+        ctx.fill();
+        ctx.closePath();
+
+        // Update the angle for next frame
+        angle += speed;
+
+        // Loop the drawing function
+        requestAnimationFrame(draw);
+    }
+
+    // Start the animation
+    draw();
+
+    // Draw the circle path using points
+    function drawPathWithPoints() {
+    }
+
+    // Draw the path on the canvas
+    drawPathWithPoints();
+</script>
 
 </body>
 </html>
